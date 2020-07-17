@@ -1,4 +1,0 @@
-{
-  // Turn off TypeScript. This project uses Flow (flow.org) for type checking.
-  "javascript.validate.enable": false
-}

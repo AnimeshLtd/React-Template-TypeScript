@@ -1,19 +1,17 @@
-// @flow
-
 import * as React from "react"
 
 import "./app.css"
 
-type Props = {
+interface AppProps {
   image: {
-    heightPx: number,
+    heightPx: number;
     /** Either absolute or relative to the `<project_root>/public` directory */
-    url: string
+    url: string;
   },
-  message: string
+  message: string;
 }
 
-export default class App extends React.Component<Props> {
+export class App extends React.Component<AppProps, {}> {
   render() {
     return (
       <div className="App">
