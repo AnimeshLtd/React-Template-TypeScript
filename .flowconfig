@@ -1,0 +1,4 @@
+[ignore]
+<PROJECT_ROOT>/dist/.*
+<PROJECT_ROOT>/public/.*
+<PROJECT_ROOT>/webpack.config.js
