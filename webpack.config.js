@@ -2,8 +2,27 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
+  /** Enable sourcemaps for debugging webpack's output */
+  devtool: "source-map",
+
+  /**
+   *  Specify which file extensions should Webpack resolve. Allows importing modules without
+   *  having to add their extensions in the `import` statement.
+   */
+  resolve: { extensions: ["*", ".js", ".ts", ".tsx"] },
+
   /** tells Webpack where our application starts and where to start bundling our files */
-  entry: "./source/index.js",
+  entry: "./source/index.tsx",
+
+  /**
+   *  When importing a module whose path matches one of the following, just assume a corresponding global
+   *  variable exists and use that instead. This is important because it allows us to avoid bundling all
+   *  of our dependencies, which allows browsers to cache those libraries between builds.
+   */
+  externals: {
+    "react": "React",
+    "react-dom": "ReactDOM"
+  },
 
   /**
    *  module object defines how exported JavaScript modules are transformed and sets rules
@@ -11,7 +30,6 @@ module.exports = {
    */
   module: {
     rules: [
-
       {
       /**
        *  This rule transforms ES6 and JSX syntax.
@@ -19,13 +37,23 @@ module.exports = {
        *  `test` and `exclude` properties are conditions to match files against. Here it
        *  matches anything outside node_modules and bower_components directories.
        *
-       *  `loader` property directs Webpack to use Babel for transforming the matched files.
-       *  options.presets makes Webpack tell Babel which presets to use for transformations.
+       *  `loader` property directs Webpack to use TypeScript compiler for transforming the matched files.
+       *  ts-loader helps Webpack compile your TypeScript code using the TypeScript’s standard configuration file named
+       *  tsconfig.json.
        */
-        test: /\.(js|jsx)$/,
+        test: /\.ts(x?)$/,
         exclude: /(node_modules|bower_components)/,
-        loader: "babel-loader",
-        options: { presets: ["@babel/env"] }
+        loader: "ts-loader",
+      },
+      {
+        /**
+         *  source-map-loader uses any sourcemap outputs from TypeScript to inform webpack when generating its own
+         *  sourcemaps. This will allow you to debug your final output file as if you were debugging your original
+         *  TypeScript source code.
+         */
+        enforce: "pre",
+        test: /\.js$/,
+        loader: "source-map-loader"
       },
       {
       /**
@@ -47,12 +75,6 @@ module.exports = {
       }
     ]
   },
-
-  /**
-   *  Specify which file extensions should Webpack resolve. Allows importing modules without
-   *  having to add their extensions in the `import` statement.
-   */
-  resolve: { extensions: ["*", ".js", ".jsx"] },
 
   /** Destination for bundled code */
   output: {
